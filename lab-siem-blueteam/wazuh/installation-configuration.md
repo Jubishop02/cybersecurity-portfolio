@@ -98,3 +98,36 @@ NET START WazuhSvc
 ---
 
 ## 4. Architecture Wazuh
+
+    ┌─────────────────────────────────────────────────┐
+    │              Ubuntu 24.04 (SIEM)                │
+    │                192.168.56.101                   │
+    │                                                 │
+    │  ┌─────────────┐  ┌──────────┐  ┌───────────┐  │
+    │  │   Indexer   │  │ Manager  │  │ Dashboard │  │
+    │  │ OpenSearch  │  │  :55000  │  │   :443    │  │
+    │  │   :9200     │  └──────────┘  └───────────┘  │
+    │  └─────────────┘                                │
+    └─────────────────────────────────────────────────┘
+             ▲              ▲              ▲
+             │              │              │
+        Debian13     WinServer2025    Win10Pro
+       Agent:1514   Agent:1514      Agent:1514
+
+
+---
+
+## 5. Points de vigilance rencontrés
+
+### Problème keystore Dashboard
+Le Dashboard utilise un keystore chiffré pour stocker les credentials de connexion à l'Indexer. En cas de problème d'authentification :
+
+```bash
+# Mettre à jour les credentials dans le keystore
+echo "kibanaserver" | sudo /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore add opensearch.username --allow-root --stdin --force
+echo "MOT_DE_PASSE" | sudo /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore add opensearch.password --allow-root --stdin --force
+sudo systemctl restart wazuh-dashboard
+```
+
+### Incompatibilité agent/manager sur la même machine
+Il est impossible d'installer `wazuh-agent` sur la même machine que `wazuh-manager`. Le manager intègre nativement la supervision locale (ID 000).
