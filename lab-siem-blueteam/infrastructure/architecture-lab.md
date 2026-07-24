@@ -2,57 +2,85 @@
 
 ## Vue d'ensemble
 
-Lab personnel de cybersécurité construit sur VirtualBox, orienté **détection et analyse** (Blue Team / SOC). Il combine un SIEM Wazuh, un environnement Active Directory et des machines cibles pour pratiquer la détection d'attaques.
+Lab personnel de cybersécurité construit sur **Oracle VirtualBox** sur un PC Windows hôte, orienté **détection et analyse (Blue Team / SOC)**. 
+
+L'objectif est de simuler un environnement d'entreprise réaliste avec :
+- Un **SIEM Wazuh** pour la collecte et l'analyse des logs
+- Un **Active Directory** pour simuler un réseau d'entreprise Windows
+- Des **machines cibles supervisées** avec agents Wazuh
+- Une **machine attaquante** (Kali Linux) pour générer des événements de sécurité
+- Une **machine volontairement vulnérable** (Metasploitable2) pour la pratique
 
 ---
 
 ## 🖥️ Machines virtuelles
 
-| VM | OS | Rôle | Réseau |
-|---|---|---|---|
-| Ubuntu24.04 | Ubuntu 24.04 | Serveur SIEM Wazuh | Host-Only 192.168.56.101 |
-| debian13 | Debian 13 | Cible Linux supervisée | Host-Only 192.168.56.102 |
-| windowsServer | Windows Server 2025 | Contrôleur de domaine AD | AD 192.168.10.10 / Host-Only 192.168.56.103 |
-| win10_client01 | Windows 10 Pro | Poste client AD supervisé | AD 192.168.10.11 / Host-Only 192.168.56.104 |
-| kali | Kali Linux | Machine de simulation d'attaques | Host-Only + NAT |
-| metasploitable2 | Ubuntu 8.04 | Cible volontairement vulnérable | NAT 10.0.2.5 |
-| REMnux | REMnux | Analyse de malware | - |
-
----
-
-## 🌐 Réseaux
-
-| Réseau | Type | Plage IP | Usage |
-|---|---|---|---|
-| Host-Only | vboxnet0 | 192.168.56.0/24 | Communication agents → SIEM |
-| Réseau interne AD | Internal | 192.168.10.0/24 | Domaine Active Directory |
-| NAT lab-pentest | NAT | 10.0.2.0/24 | Simulation d'attaques isolée |
-
----
-
-## 🔍 Supervision Wazuh
-
-| Agent | OS | Statut |
-|---|---|---|
-| debian-lab_siem | Debian 13 | ✅ Actif |
-| windowsServer_lab_siem | Windows Server 2025 | ✅ Actif |
-| windows_client_lab_siem | Windows 10 Pro | ✅ Actif |
-
-> ℹ️ Kali et Metasploitable2 n'ont pas d'agent Wazuh — elles jouent le rôle de l'attaquant externe non supervisé.
-
----
-
-## 🏢 Active Directory
-
+### Ubuntu 24.04 — Serveur SIEM Wazuh
 | Paramètre | Valeur |
 |---|---|
+| Rôle | Serveur SIEM central |
+| OS | Ubuntu 24.04 LTS |
+| RAM | 6144 Mo |
+| CPU | 7 vCPUs |
+| Disque | 40 Go |
+| IP Host-Only | 192.168.56.101 |
+| Services | Wazuh Indexer (OpenSearch), Wazuh Manager, Wazuh Dashboard |
+| Agent Wazuh | ID 000 (local, intégré au manager) |
+
+### Debian 13 — Cible Linux supervisée
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Poste Linux supervisé |
+| OS | Debian 13 (Trixie) |
+| RAM | 4096 Mo |
+| CPU | 6 vCPUs |
+| Disque | 30 Go |
+| IP Host-Only | 192.168.56.102 |
+| Agent Wazuh | ID 001 — debian-lab_siem |
+| Vulnérabilités détectées | 120 critiques (CVE 2026) |
+
+### Windows Server 2025 — Contrôleur de domaine
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Contrôleur de domaine Active Directory |
+| OS | Windows Server 2025 Standard Evaluation |
+| IP réseau AD | 192.168.10.10 |
+| IP Host-Only | 192.168.56.103 |
 | Domaine | premierAD.com |
-| Contrôleur de domaine | Local_Server_Bishop.premierAD.com |
-| Mode | Windows Server 2025 Domain |
-| Client joint | win10-client01 |
+| Rôles FSMO | PDC Emulator, RID Master, Infrastructure Master |
+| Agent Wazuh | ID 002 — windowsServer_lab_siem |
 
----
+### Windows 10 Pro — Poste client AD
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Poste client joint au domaine |
+| OS | Windows 10 Pro 10.0.19045 |
+| IP réseau AD | 192.168.10.11 |
+| IP Host-Only | 192.168.56.104 |
+| Domaine | premierAD.com |
+| DNS | 192.168.10.10 (contrôleur de domaine) |
+| Agent Wazuh | ID 003 — windows_client_lab_siem |
 
-## 📸 Snapshots
+### Kali Linux — Machine attaquante
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Simulation d'attaques externes |
+| OS | Kali Linux (rolling) |
+| IP Host-Only | 192.168.56.102 |
+| IP NAT lab-pentest | 10.0.2.6 |
+| Agent Wazuh | ❌ Aucun (simule un attaquant externe) |
+| Outils | Nmap, Metasploit, Hydra, Netcat, searchsploit |
 
-Toutes les VMs disposent d'un snapshot **"base-propre-avril-2026"** permettant de restaurer un état stable après les exercices.
+### Metasploitable2 — Cible vulnérable
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Cible d'entraînement volontairement vulnérable |
+| OS | Ubuntu 8.04 |
+| IP NAT lab-pentest | 10.0.2.5 |
+| Agent Wazuh | ❌ Aucun |
+| Services exposés | FTP (vsftpd 2.3.4), SSH, Telnet, Samba 3.0.20, MySQL, VNC... |
+
+### REMnux — Analyse de malware
+| Paramètre | Valeur |
+|---|---|
+| Rôle | Analyse statique
