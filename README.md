@@ -40,7 +40,18 @@ Analyste SOC / Pentester Junior | Recherche CDI à partir de Mars 2027
 
 ## 📜 Certifications
 
-- 🎓 **CompTIA Security+** (prévu juin 2026)
+### ✅ Obtenues
+- 🎓 **TryHackMe — Pre Security** (par examen) — mars 2026
+- 🎓 **TryHackMe — Cyber Security 101** (45h) — décembre 2025
+- 🎓 **ANSSI SecNumacadémie** — MOOC SSI complet (88-90%) — janvier 2026
+- 🎓 **ANSSI / Club EBIOS** — Introduction EBIOS Risk Manager — janvier 2026
+- 🎓 **Cisco Networking Academy** — Introduction to Cybersecurity — janvier 2026
+- 🎓 **IBM SkillsBuild** — Cybersecurity Fundamentals — janvier 2026
+
+### 🎯 En cours / Objectifs
+- 🔄 **CompTIA Security+** (en cours — objectif Q3 2026)
+- ⏳ **TryHackMe SOC Level 1** (en cours)
+- ⏳ **Blue Team Labs Online** (objectif 2027)
 
 ---
 
