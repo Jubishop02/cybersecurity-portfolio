@@ -2,7 +2,7 @@
 
 ## 🎯 Objectif du lab
 
-Monter une infrastructure de détection SOC complète et fonctionnelle : SIEM open source (Wazuh), agents déployés sur un environnement Windows/Active Directory simulé, enrichissement de la télémétrie via Sysmon, et analyse de logs réseau bruts (firewall, VPN, IDS) via Splunk.
+Monter une infrastructure de détection SOC complète et fonctionnelle : SIEM open source (Wazuh), agents déployés sur un environnement Windows/Active Directory simulé, et enrichissement de la télémétrie via Sysmon.
 
 ---
 
@@ -86,19 +86,6 @@ Ajout dans `C:\Program Files (x86)\ossec-agent\ossec.conf` :
 </localfile>
 ```
 
-### 5. Analyse de logs réseau bruts (Splunk)
-
-Sur un jeu de données pédagogique (firewall, VPN, IDS logs), requêtage SPL pour détecter :
-
-- **Reconnaissance horizontale** (ping sweep) : une IP source touchant méthodiquement une plage d'adresses
-- **Reconnaissance verticale** (scan de ports) : une IP source testant de nombreux ports sur une seule cible
-
-```spl
-index="network_logs" sourcetype="firewall_logs"
-| stats dc(dst_port) as ports_distincts by src_ip
-| sort -ports_distincts
-```
-
 ---
 
 ## 🔍 Investigation d'alertes — exemple concret
@@ -117,7 +104,6 @@ Le dashboard Wazuh remonte une alerte de sévérité élevée (niveau 12+) : acc
 
 - Déploiement et administration d'un SIEM open source de bout en bout (Wazuh)
 - Configuration et exploitation de Sysmon pour la télémétrie endpoint
-- Analyse de logs réseau et requêtage SPL (Splunk)
 - Cartographie et lecture d'alertes via MITRE ATT&CK
 - Administration Linux (Debian) et Windows Server / Active Directory
 - Diagnostic et résolution de problèmes réseau (VMware networking, DHCP, segmentation NAT/isolé)
