@@ -90,31 +90,17 @@ Analyste SOC / Pentester Junior | Recherche CDI à partir de Mars 2027
 
 ### 🎯 En cours / Objectifs
 
-- 🔄 **CompTIA Security+** (en cours — objectif Q3 2026)
+- 🔄 **CompTIA Security+** (objectif 2027)
 - ⏳ **TryHackMe SOC Level 1** (en cours)
 - ⏳ **Blue Team Labs Online** (objectif 2027)
 
 ---
 
-## 📁 Projets & Writeups
-
-### TryHackMe
-
-- *(En cours de développement)*
-
-### HackTheBox
-
-- *(À venir)*
-
-### Scripts personnels
-
-- *(En cours de développement)*
-
----
 
 ## 📊 Profils
 
 - 🎮 **TryHackMe** : [Jubishop02](https://tryhackme.com/p/Jubishop)
+- 💼 LinkedIn : <https://www.linkedin.com/in/julien-g-a000b399/>
 
 ---
 
